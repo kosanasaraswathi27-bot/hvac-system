@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Smart HVAC Occupancy Optimizer</title>
+<link rel="stylesheet" href="/static/style.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <h1>Smart HVAC Occupancy Optimizer</h1>
+    </div>
+    <div class="room-select">
+      <label for="roomId">Room</label>
+      <input id="roomId" type="text" value="classroom-a" />
+      <button id="resetBtn" title="Clear tracking history for this room">Reset</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="panel camera-panel">
+      <div class="panel-header">
+        <h2>Live Camera Feed</h2>
+        <div class="controls">
+          <button id="startBtn">Start Camera</button>
+          <button id="stopBtn" disabled>Stop</button>
+          <span id="fpsBadge" class="badge">-- ms/frame</span>
+        </div>
+      </div>
+      <div class="video-wrap">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="overlay"></canvas>
+        <div id="cameraPlaceholder" class="camera-placeholder">
+          Click "Start Camera" to begin detecting occupancy.<br />
+          <small>Your browser will ask for camera permission. Nothing leaves your machine except to your own backend.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel status-panel">
+      <h2>Room Status</h2>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Current Occupancy</div>
+          <div id="occupancyValue" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">HVAC Status</div>
+          <div id="hvacValue" class="stat-value hvac-ENERGY_SAVING">Energy Saving</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Estimated Power Draw</div>
+          <div id="powerValue" class="stat-value">0.0 kW</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Detection Backend</div>
+          <div id="backendValue" class="stat-value small">--</div>
+        </div>
+      </div>
+
+      <div class="energy-block">
+        <div class="energy-label">
+          <span>Energy Saved vs. Always-On Baseline</span>
+          <span id="energyPct">0%</span>
+        </div>
+        <div class="energy-bar">
+          <div id="energyFill" class="energy-fill"></div>
+        </div>
+      </div>
+
+      <div class="mqtt-block">
+        <h3>Last MQTT Command</h3>
+        <pre id="mqttPayload">--</pre>
+      </div>
+    </section>
+
+    <section class="panel chart-panel">
+      <h2>Occupancy Over Time</h2>
+      <canvas id="historyChart" height="90"></canvas>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Smart Building HVAC Optimizer — Camera → OpenCV → Detection → Tracking → Occupancy → HVAC Decision → MQTT
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
